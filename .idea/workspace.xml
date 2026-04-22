@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="304ea3dc-8cbb-4a7f-b82d-c591085aae44" name="Changes" comment="interface grafica">
+      <change afterPath="$PROJECT_DIR$/IODataLibrary-1.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Alunos.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Equipes.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Projetos.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Tarefas.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/pt/estga/lp/taskmanager/GestorDeListas.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/pt/estga/lp/taskmanager/TaskManagerApp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/teste/src/pt/estga/lp/taskmanager/TaskManagerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gestor de projetos/teste/src/pt/estga/lp/taskmanager/TaskManagerApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gestor de projetos/teste/teste.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Gestor de projetos/teste/teste.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="3CdIdjzPMMAcHD4ZGx5MDFzKnj4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.TaskManagerApp.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/goncalomarques/Desktop/projeto 2/Trabalho-LP2",
+    "onboarding.tips.debug.path": "/Users/goncalomarques/Desktop/projeto 2/Trabalho-LP2/src/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="304ea3dc-8cbb-4a7f-b82d-c591085aae44" name="Changes" comment="" />
+      <created>1776709109388</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1776709109388</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="interface grafica" />
+    <option name="LAST_COMMIT_MESSAGE" value="interface grafica" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Main.java</url>
+          <line>10</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

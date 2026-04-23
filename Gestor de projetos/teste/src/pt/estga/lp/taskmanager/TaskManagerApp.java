@@ -1,7 +1,6 @@
 package pt.estga.lp.taskmanager;
 
 import entities.Alunos;
-import entities.Equipes;
 import entities.Projetos;
 import entities.Tarefas;
 import trabalho2.IODataClass;
@@ -11,13 +10,10 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TaskManagerApp extends JFrame {
 
     private GestorDeListas model = new GestorDeListas();
-    private final Map<String, Equipes> projectTeamMap = new HashMap<>();
 
     private JList<Projetos> projectList;
     private DefaultListModel<Projetos> projectListModel;
@@ -70,6 +66,7 @@ public class TaskManagerApp extends JFrame {
         menuBar.add(menu);
         setJMenuBar(menuBar);
 
+        // --- PAINEL ESQUERDO: PROJETOS ---
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setBorder(BorderFactory.createTitledBorder("Projetos"));
         leftPanel.setPreferredSize(new Dimension(200, 600));
@@ -95,6 +92,7 @@ public class TaskManagerApp extends JFrame {
 
         add(leftPanel, BorderLayout.WEST);
 
+        // --- PAINEL CENTRAL: TAREFAS (KANBAN) ---
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBorder(BorderFactory.createTitledBorder("Tarefas"));
 
@@ -150,8 +148,9 @@ public class TaskManagerApp extends JFrame {
 
         add(centerPanel, BorderLayout.CENTER);
 
+        // --- PAINEL DIREITO: EQUIPA ---
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setBorder(BorderFactory.createTitledBorder("Equipa"));
+        rightPanel.setBorder(BorderFactory.createTitledBorder("Equipa do Projeto"));
         rightPanel.setPreferredSize(new Dimension(250, 600));
 
         assignedLabel = new JLabel("Atribuído a: ---");
@@ -170,7 +169,7 @@ public class TaskManagerApp extends JFrame {
         JButton removeMemberBtn = new JButton("Remover membro");
         removeMemberBtn.addActionListener(e -> removeMember());
 
-        JButton newStudentBtn = new JButton("Novo aluno");
+        JButton newStudentBtn = new JButton("Novo aluno no Sistema");
         newStudentBtn.addActionListener(e -> createStudent());
 
         assignCombo = new JComboBox<>();
@@ -200,6 +199,7 @@ public class TaskManagerApp extends JFrame {
 
         add(rightPanel, BorderLayout.EAST);
 
+        // --- LISTENERS DE SELEÇÃO DE TAREFAS ---
         todoList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && todoList.getSelectedValue() != null) {
                 progressList.clearSelection();
@@ -238,15 +238,17 @@ public class TaskManagerApp extends JFrame {
         return null;
     }
 
+    // --- ATUALIZAÇÃO DA INTERFACE ---
+
     private void refreshProjectList() {
         projectListModel.clear();
         for (Projetos p : model.getProjetos()) {
             projectListModel.addElement(p);
         }
 
-        if (projectListModel.size() > 0) {
+        if (projectListModel.size() > 0 && currentProject == null) {
             projectList.setSelectedIndex(0);
-        } else {
+        } else if (projectListModel.size() == 0) {
             currentProject = null;
             clearKanban();
             teamModel.clear();
@@ -268,10 +270,9 @@ public class TaskManagerApp extends JFrame {
 
     private void refreshKanban() {
         clearKanban();
-
         if (currentProject == null) return;
 
-        for (Tarefas t : model.getTarefasPorProjeto(currentProject.getNome())) {
+        for (Tarefas t : currentProject.getTarefas()) {
             if (t.getStatus().equals(TODO)) todoModel.addElement(t);
             else if (t.getStatus().equals(PROGRESS)) progressModel.addElement(t);
             else if (t.getStatus().equals(DONE)) doneModel.addElement(t);
@@ -290,29 +291,25 @@ public class TaskManagerApp extends JFrame {
 
         if (currentProject == null) return;
 
-        Equipes team = projectTeamMap.get(currentProject.getNome());
-        if (team != null) {
-            for (Alunos a : team.getAlunos()) {
-                teamModel.addElement(a);
-            }
-            for (Alunos a : model.getAlunos()) {
-                if (!team.getAlunos().contains(a)) {
-                    addMemberCombo.addItem(a);
-                }
+        // Adiciona membros do projeto à lista da equipa
+        for (Alunos a : currentProject.getEquipa()) {
+            teamModel.addElement(a);
+        }
+
+        // Adiciona alunos globais que ainda NÃO estão na equipa à ComboBox
+        for (Alunos a : model.getAlunos()) {
+            if (!currentProject.getEquipa().contains(a)) {
+                addMemberCombo.addItem(a);
             }
         }
     }
 
     private void refreshAssignCombo() {
         assignCombo.removeAllItems();
-
         if (currentProject == null) return;
 
-        Equipes team = projectTeamMap.get(currentProject.getNome());
-        if (team != null) {
-            for (Alunos a : team.getAlunos()) {
-                assignCombo.addItem(a);
-            }
+        for (Alunos a : currentProject.getEquipa()) {
+            assignCombo.addItem(a);
         }
     }
 
@@ -323,16 +320,17 @@ public class TaskManagerApp extends JFrame {
             return;
         }
 
-        Alunos a = model.getAlunoAtribuidoATarefa(task.getNome());
+        Alunos a = task.getResponsavel();
         if (a == null) assignedLabel.setText("Atribuído a: Não atribuída");
         else assignedLabel.setText("Atribuído a: " + a.getNome());
     }
+
+    // --- AÇÕES DOS BOTÕES ---
 
     private void addProject() {
         String name = JOptionPane.showInputDialog(this, "Nome do projeto:");
         if (name != null && !name.trim().isEmpty()) {
             model.criarProjeto(name.trim());
-            projectTeamMap.put(name.trim(), new Equipes());
             refreshProjectList();
         }
     }
@@ -345,14 +343,7 @@ public class TaskManagerApp extends JFrame {
 
         String newName = JOptionPane.showInputDialog(this, "Novo nome:", currentProject.getNome());
         if (newName != null && !newName.trim().isEmpty()) {
-            String oldName = currentProject.getNome();
-            model.editarProjeto(oldName, newName.trim());
-
-            Equipes team = projectTeamMap.remove(oldName);
-            if (team != null) {
-                projectTeamMap.put(newName.trim(), team);
-            }
-
+            currentProject.setNome(newName.trim()); // Atualização direta no objeto
             refreshProjectList();
         }
     }
@@ -363,15 +354,10 @@ public class TaskManagerApp extends JFrame {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Eliminar projeto '" + currentProject.getNome() + "'?",
-                "Confirmar",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.PLAIN_MESSAGE);
-
+        int confirm = JOptionPane.showConfirmDialog(this, "Eliminar projeto '" + currentProject.getNome() + "'?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            model.removerProjeto(currentProject.getNome());
-            projectTeamMap.remove(currentProject.getNome());
+            model.getProjetos().remove(currentProject);
+            currentProject = null;
             refreshProjectList();
         }
     }
@@ -384,9 +370,8 @@ public class TaskManagerApp extends JFrame {
 
         String name = JOptionPane.showInputDialog(this, "Nome da tarefa:");
         if (name != null && !name.trim().isEmpty()) {
-            model.criarTarefas(name.trim(), TODO);
-            Tarefas t = model.getTarefas().get(model.getTarefas().size() - 1);
-            model.associarTarefaAProjeto(t.getNome(), currentProject.getNome());
+            model.criarTarefa(name.trim(), TODO);
+            model.associarTarefaAProjeto(name.trim(), currentProject.getNome());
             refreshKanban();
         }
     }
@@ -400,7 +385,7 @@ public class TaskManagerApp extends JFrame {
 
         String newName = JOptionPane.showInputDialog(this, "Novo nome:", t.getNome());
         if (newName != null && !newName.trim().isEmpty()) {
-            model.editarTarefa(t.getNome(), newName.trim());
+            t.setNome(newName.trim());
             refreshKanban();
             updateAssignedLabel();
         }
@@ -413,14 +398,10 @@ public class TaskManagerApp extends JFrame {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Remover tarefa '" + t.getNome() + "'?",
-                "Confirmar",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.PLAIN_MESSAGE);
-
+        int confirm = JOptionPane.showConfirmDialog(this, "Remover tarefa '" + t.getNome() + "'?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            model.removerTarefas(t.getNome());
+            currentProject.removerTarefa(t);
+            model.getTarefas().remove(t);
             refreshKanban();
             updateAssignedLabel();
         }
@@ -434,7 +415,6 @@ public class TaskManagerApp extends JFrame {
         }
 
         String newStatus = null;
-
         if (direction == -1) {
             if (t.getStatus().equals(PROGRESS)) newStatus = TODO;
             else if (t.getStatus().equals(DONE)) newStatus = PROGRESS;
@@ -444,7 +424,7 @@ public class TaskManagerApp extends JFrame {
         }
 
         if (newStatus != null) {
-            model.alterarStatusTarefa(t.getNome(), newStatus);
+            t.setStatus(newStatus);
             refreshKanban();
             updateAssignedLabel();
         }
@@ -455,7 +435,6 @@ public class TaskManagerApp extends JFrame {
         if (name != null && !name.trim().isEmpty()) {
             model.criarAluno(name.trim());
             refreshTeam();
-            refreshAssignCombo();
         }
     }
 
@@ -471,12 +450,9 @@ public class TaskManagerApp extends JFrame {
             return;
         }
 
-        Equipes team = projectTeamMap.get(currentProject.getNome());
-        if (team != null) {
-            team.adicionarAluno(a);
-            refreshTeam();
-            refreshAssignCombo();
-        }
+        currentProject.adicionarMembro(a);
+        refreshTeam();
+        refreshAssignCombo();
     }
 
     private void removeMember() {
@@ -491,12 +467,19 @@ public class TaskManagerApp extends JFrame {
             return;
         }
 
-        Equipes team = projectTeamMap.get(currentProject.getNome());
-        if (team != null) {
-            team.removerAluno(a.getNome());
-            refreshTeam();
-            refreshAssignCombo();
+        currentProject.removerMembro(a);
+
+        // Se a tarefa estiver atribuída a este aluno, removemos a atribuição
+        for (Tarefas t : currentProject.getTarefas()) {
+            if (t.getResponsavel() != null && t.getResponsavel().equals(a)) {
+                t.setResponsavel(null);
+            }
         }
+
+        refreshTeam();
+        refreshAssignCombo();
+        refreshKanban();
+        updateAssignedLabel();
     }
 
     private void assignTask() {
@@ -512,10 +495,12 @@ public class TaskManagerApp extends JFrame {
             return;
         }
 
-        model.atribuirTarefaAAluno(task.getNome(), a.getNome());
+        task.setResponsavel(a);
         updateAssignedLabel();
         msg("Tarefa atribuída a " + a.getNome());
     }
+
+    // --- PERSISTÊNCIA DE DADOS (Adaptada para objetos diretos) ---
 
     private void saveData() {
         try {
@@ -527,10 +512,10 @@ public class TaskManagerApp extends JFrame {
             linhas.add("FIM_PROJETOS");
 
             linhas.add("TAREFAS");
-            for (Tarefas t : model.getTarefas()) {
-                Projetos p = model.getProjetoDaTarefa(t.getNome());
-                String projName = (p != null) ? p.getNome() : "";
-                linhas.add(t.getNome() + "|" + t.getStatus() + "|" + projName);
+            for (Projetos p : model.getProjetos()) {
+                for (Tarefas t : p.getTarefas()) {
+                    linhas.add(t.getNome() + "|" + t.getStatus() + "|" + p.getNome());
+                }
             }
             linhas.add("FIM_TAREFAS");
 
@@ -540,18 +525,21 @@ public class TaskManagerApp extends JFrame {
 
             linhas.add("ATRIBUICOES");
             for (Tarefas t : model.getTarefas()) {
-                Alunos a = model.getAlunoAtribuidoATarefa(t.getNome());
-                if (a != null) linhas.add(t.getNome() + "|" + a.getNome());
+                if (t.getResponsavel() != null) {
+                    linhas.add(t.getNome() + "|" + t.getResponsavel().getNome());
+                }
             }
             linhas.add("FIM_ATRIBUICOES");
 
             linhas.add("EQUIPAS_PROJETO");
-            for (Map.Entry<String, Equipes> entry : projectTeamMap.entrySet()) {
-                StringBuilder sb = new StringBuilder(entry.getKey());
-                for (Alunos a : entry.getValue().getAlunos()) {
-                    sb.append("|").append(a.getNome());
+            for (Projetos p : model.getProjetos()) {
+                if (!p.getEquipa().isEmpty()) {
+                    StringBuilder sb = new StringBuilder(p.getNome());
+                    for (Alunos a : p.getEquipa()) {
+                        sb.append("|").append(a.getNome());
+                    }
+                    linhas.add(sb.toString());
                 }
-                linhas.add(sb.toString());
             }
             linhas.add("FIM_EQUIPAS_PROJETO");
 
@@ -572,26 +560,24 @@ public class TaskManagerApp extends JFrame {
             if (linhas == null || linhas.length == 0) return;
 
             GestorDeListas newModel = new GestorDeListas();
-            Map<String, Equipes> newTeamMap = new HashMap<>();
-
             int i = 0;
 
+            // 1. Carregar Projetos
             while (i < linhas.length && !linhas[i].equals("PROJETOS")) i++;
-            if (i >= linhas.length) return;
-            i++;
+            if (i < linhas.length) i++;
             while (i < linhas.length && !linhas[i].equals("FIM_PROJETOS")) {
                 if (!linhas[i].isEmpty()) newModel.criarProjeto(linhas[i]);
                 i++;
             }
 
+            // 2. Carregar Tarefas
             while (i < linhas.length && !linhas[i].equals("TAREFAS")) i++;
-            if (i >= linhas.length) return;
-            i++;
+            if (i < linhas.length) i++;
             while (i < linhas.length && !linhas[i].equals("FIM_TAREFAS")) {
                 if (!linhas[i].isEmpty()) {
                     String[] parts = linhas[i].split("\\|");
                     if (parts.length >= 2) {
-                        newModel.criarTarefas(parts[0], parts[1]);
+                        newModel.criarTarefa(parts[0], parts[1]);
                         if (parts.length >= 3 && !parts[2].isEmpty()) {
                             newModel.associarTarefaAProjeto(parts[0], parts[2]);
                         }
@@ -600,17 +586,17 @@ public class TaskManagerApp extends JFrame {
                 i++;
             }
 
+            // 3. Carregar Alunos Globais
             while (i < linhas.length && !linhas[i].equals("ALUNOS")) i++;
-            if (i >= linhas.length) return;
-            i++;
+            if (i < linhas.length) i++;
             while (i < linhas.length && !linhas[i].equals("FIM_ALUNOS")) {
                 if (!linhas[i].isEmpty()) newModel.criarAluno(linhas[i]);
                 i++;
             }
 
+            // 4. Carregar Atribuições de Tarefas
             while (i < linhas.length && !linhas[i].equals("ATRIBUICOES")) i++;
-            if (i >= linhas.length) return;
-            i++;
+            if (i < linhas.length) i++;
             while (i < linhas.length && !linhas[i].equals("FIM_ATRIBUICOES")) {
                 if (!linhas[i].isEmpty()) {
                     String[] parts = linhas[i].split("\\|");
@@ -619,35 +605,40 @@ public class TaskManagerApp extends JFrame {
                 i++;
             }
 
+            // 5. Carregar Equipas dos Projetos (Agora é ArrayList no Projeto)
             while (i < linhas.length && !linhas[i].equals("EQUIPAS_PROJETO")) i++;
-            if (i >= linhas.length) return;
-            i++;
+            if (i < linhas.length) i++;
             while (i < linhas.length && !linhas[i].equals("FIM_EQUIPAS_PROJETO")) {
                 if (!linhas[i].isEmpty()) {
                     String[] parts = linhas[i].split("\\|");
-                    Equipes eq = new Equipes();
-                    for (int j = 1; j < parts.length; j++) {
-                        for (Alunos a : newModel.getAlunos()) {
-                            if (a.getNome().equals(parts[j])) {
-                                eq.adicionarAluno(a);
+                    if (parts.length > 1) {
+                        // Procurar o projeto
+                        Projetos p = null;
+                        for (Projetos proj : newModel.getProjetos()) {
+                            if (proj.getNome().equals(parts[0])) {
+                                p = proj;
                                 break;
                             }
                         }
+                        // Se encontrou o projeto, adiciona-lhe os membros
+                        if (p != null) {
+                            for (int j = 1; j < parts.length; j++) {
+                                for (Alunos a : newModel.getAlunos()) {
+                                    if (a.getNome().equals(parts[j])) {
+                                        p.adicionarMembro(a);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
-                    newTeamMap.put(parts[0], eq);
                 }
                 i++;
             }
 
             model = newModel;
-            projectTeamMap.clear();
-            projectTeamMap.putAll(newTeamMap);
-
+            currentProject = null;
             refreshProjectList();
-            refreshKanban();
-            refreshTeam();
-            refreshAssignCombo();
-            updateAssignedLabel();
 
             msg("Dados carregados com sucesso.");
         } catch (Exception e) {

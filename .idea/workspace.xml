@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="304ea3dc-8cbb-4a7f-b82d-c591085aae44" name="Changes" comment="interface grafica">
-      <change afterPath="$PROJECT_DIR$/IODataLibrary-1.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Alunos.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Equipes.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Projetos.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/entities/Tarefas.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/pt/estga/lp/taskmanager/GestorDeListas.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/out/production/teste/pt/estga/lp/taskmanager/TaskManagerApp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/teste/src/pt/estga/lp/taskmanager/TaskManagerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Gestor de projetos/teste/src/pt/estga/lp/taskmanager/TaskManagerApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gestor de projetos/teste/teste.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Gestor de projetos/teste/teste.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-    </list>
+    <list default="true" id="304ea3dc-8cbb-4a7f-b82d-c591085aae44" name="Changes" comment="interface grafica" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,13 +13,25 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "NicolasCP-12"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/NicolasCP-12/Trabalho-LP2.git",
+    "accountId": "cad2b57a-b1f0-49e2-b64d-0715c65df5e3"
+  }
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="3CdIdjzPMMAcHD4ZGx5MDFzKnj4" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -44,11 +44,12 @@
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.restore.workspace.module": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/goncalomarques/Desktop/projeto 2/Trabalho-LP2",
+    "last_opened_file_path": "C:/Users/nicol/Semestre-2/LP/Trabalho-LP2",
     "onboarding.tips.debug.path": "/Users/goncalomarques/Desktop/projeto 2/Trabalho-LP2/src/Main.java",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
@@ -56,6 +57,55 @@
     "to.speed.mode.migration.done": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Trabalho-LP2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Trabalho-LP2" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="Trabalho-LP2" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="Trabalho-LP2" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
